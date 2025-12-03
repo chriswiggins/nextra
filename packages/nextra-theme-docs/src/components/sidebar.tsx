@@ -382,6 +382,14 @@ export function Sidebar({
   const hasMenu =
     themeConfig.darkMode || hasI18n || themeConfig.sidebar.toggleButton
 
+  const { visibilityCheck } = themeConfig.menuItems
+  const filteredDocsDirectories = docsDirectories.filter(
+    item => !visibilityCheck || visibilityCheck(item)
+  )
+  const filteredFullDirectories = fullDirectories.filter(
+    item => !visibilityCheck || visibilityCheck(item)
+  )
+
   return (
     <>
       {includePlaceholder && asPopover && (
@@ -432,7 +440,7 @@ export function Sidebar({
                   <Menu
                     className="nextra-menu-desktop max-md:_hidden"
                     // The sidebar menu, shows only the docs directories.
-                    directories={docsDirectories}
+                    directories={filteredDocsDirectories}
                     // When the viewport size is larger than `md`, hide the anchors in
                     // the sidebar when `floatTOC` is enabled.
                     anchors={themeConfig.toc.float ? [] : anchors}
@@ -444,7 +452,7 @@ export function Sidebar({
                 <Menu
                   className="nextra-menu-mobile md:_hidden"
                   // The mobile dropdown menu, shows all the directories.
-                  directories={fullDirectories}
+                  directories={filteredFullDirectories}
                   // Always show the anchor links on mobile (`md`).
                   anchors={anchors}
                 />
